@@ -5,5 +5,30 @@
   "paginate": {
     "default": 10,
     "max": 50
-  }
+  },
+  "authentication": {
+    "secret": "ea6d2f514198685d8f8aa524e84c6e3b9b4106f66a382aae882f9f6792272bfe15064cfa72440381a8e2dd7d890027281f05b1b01925e1a84a38ddd0d819888ad7fcbf10c822e9ed20baa2a980322b4ba702e1895a5b593ba37e3e1b6dac5d74774bc35f34cdcdf630d997fad9e16f037d2a0eaac1cee67a094775e4c3d5f548239418dde86e4bcb2ee6c127d828c4a4e72376faf86bddf2d9857f66ad7bbe143c63dbf6b8b6e9c347b3a665a63ab14e0e3e940a50dfb2da79ef2702b803f81a8c6e257cae6803c4a3b0a55c8ec9e74cac09673a1717ad13e6c90933488f29e300ccfa7bda04ee5711d9e45756fc7d267eb7321784bc845bb237be7260265284",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  },
+  "sqlite": "sqlite://data/dev.sqlite"
 }
