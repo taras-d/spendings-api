@@ -1,2 +1,4 @@
-module.exports = function (app) { // eslint-disable-line no-unused-vars
+const ping = require('./ping/ping.service.js');
+module.exports = function (app) {
+  app.configure(ping);
 };
