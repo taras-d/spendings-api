@@ -2,14 +2,13 @@
   "name": "spendings-api",
   "description": "REST API for Spendings app",
   "version": "0.0.0",
-  "homepage": "",
   "main": "src",
   "keywords": [
     "feathers"
   ],
   "author": {
-    "name": "",
-    "email": ""
+    "name": "taras-d",
+    "email": "taras.datsenko@gmail.com"
   },
   "contributors": [],
   "bugs": {},
