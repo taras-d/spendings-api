@@ -1,18 +1,36 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
+const { authenticate } = require('@feathersjs/authentication').hooks,
+  { disallow } = require('feathers-hooks-common'),
+  { restrictToOwner } = require('feathers-authentication-hooks'),
+  { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 
-const {
- hashPassword, protect
-} = require('@feathersjs/authentication-local').hooks;
+const jwt = () => authenticate('jwt'),
+  owner = () => restrictToOwner({ idField: 'id', ownerField: 'id' });
 
 module.exports = {
   before: {
-    all: [],
-    find: [ authenticate('jwt') ],
-    get: [ authenticate('jwt') ],
-    create: [ hashPassword() ],
-    update: [ hashPassword() ],
-    patch: [ hashPassword() ],
-    remove: []
+    all: [ ],
+    find: [ disallow('external') ],
+    get: [
+      jwt(),
+      owner()
+    ],
+    create: [
+      hashPassword()
+    ],
+    update: [
+      jwt(),
+      owner(),
+      hashPassword()
+    ],
+    patch: [
+      jwt(),
+      owner(),
+      hashPassword()
+    ],
+    remove: [
+      jwt(),
+      owner()
+    ]
   },
 
   after: {
