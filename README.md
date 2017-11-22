@@ -15,6 +15,7 @@ This project uses [Feathers](http://feathersjs.com). An open source web framewor
 ```
 npm install            # Install node dependencies
 sequelize db:migrate   # Run database migrations
+sequelize db:seed:all  # Seed database with initial data 
 ```
 
 ## Start app
