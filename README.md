@@ -6,13 +6,18 @@
 
 This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
+## Requirements
+- Node 8 or higher
+- [Feathers CLI](https://github.com/feathersjs/cli)
+- [Sequelize CLI](https://github.com/sequelize/cli)
+
 ## Installation
 ```
 npm install            # Install node dependencies
 sequelize db:migrate   # Run database migrations
 ```
 
-## Run
+## Start app
 ```
 npm start              # Start Feathers app
 ```
