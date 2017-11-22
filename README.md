@@ -8,12 +8,13 @@ This project uses [Feathers](http://feathersjs.com). An open source web framewor
 
 ## Installation
 ```
-npm install      # Install node dependencies
+npm install            # Install node dependencies
+sequelize db:migrate   # Run database migrations
 ```
 
 ## Run
 ```
-npm start        # Start Feathers app
+npm start              # Start Feathers app
 ```
 
 ## Testing

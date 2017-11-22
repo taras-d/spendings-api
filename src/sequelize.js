@@ -23,9 +23,6 @@ module.exports = function (app) {
       }
     });
 
-    // Sync to the database
-    sequelize.sync();
-
     return result;
   };
 };
