@@ -1,6 +1,7 @@
-const authentication = require('@feathersjs/authentication');
-const jwt = require('@feathersjs/authentication-jwt');
-const local = require('@feathersjs/authentication-local');
+const authentication = require('@feathersjs/authentication'),
+  jwt = require('@feathersjs/authentication-jwt'),
+  local = require('@feathersjs/authentication-local'),
+  { discard } = require('feathers-hooks-common');
 
 
 module.exports = function (app) {
@@ -17,10 +18,18 @@ module.exports = function (app) {
   app.service('authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate(config.strategies)
+        authentication.hooks.authenticate(config.strategies),
       ],
       remove: [
         authentication.hooks.authenticate('jwt')
+      ]
+    },
+    after: {
+      create: [
+        hook => {
+          hook.result.user = hook.params.user;
+        },
+        discard('user.password')
       ]
     }
   });
