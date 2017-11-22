@@ -1,5 +1,5 @@
 const { authenticate } = require('@feathersjs/authentication').hooks,
-  { disallow } = require('feathers-hooks-common'),
+  { disallow, disableMultiItemChange } = require('feathers-hooks-common'),
   { restrictToOwner } = require('feathers-authentication-hooks'),
   { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 
@@ -9,7 +9,9 @@ const jwt = () => authenticate('jwt'),
 module.exports = {
   before: {
     all: [ ],
-    find: [ disallow('external') ],
+    find: [
+      disallow('external')
+    ],
     get: [
       jwt(),
       owner()
@@ -18,16 +20,19 @@ module.exports = {
       hashPassword()
     ],
     update: [
+      disableMultiItemChange(),
       jwt(),
       owner(),
       hashPassword()
     ],
     patch: [
+      disableMultiItemChange(),
       jwt(),
       owner(),
       hashPassword()
     ],
     remove: [
+      disableMultiItemChange(),
       jwt(),
       owner()
     ]
