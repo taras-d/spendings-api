@@ -2,7 +2,7 @@ const { authenticate } = require('@feathersjs/authentication').hooks,
   { restrictToOwner } = require('feathers-authentication-hooks'),
   { discard, isProvider, iff, disallow, disableMultiItemChange } = require('feathers-hooks-common');
 
-const processSpending = require('../../hooks/spending/process-spending');
+const processSpendingItems = require('../../hooks/spendings/process-spending-items');
 
 const owner = () => restrictToOwner({ idField: 'id', ownerField: 'userId' });
 
@@ -18,7 +18,7 @@ module.exports = {
       owner()
     ],
     create: [
-      processSpending()
+      processSpendingItems()
     ],
     update: [
       disallow('external')
@@ -26,7 +26,7 @@ module.exports = {
     patch: [
       disableMultiItemChange(),
       owner(),
-      processSpending()
+      processSpendingItems()
     ],
     remove: [
       disableMultiItemChange(),
@@ -35,19 +35,20 @@ module.exports = {
   },
 
   after: {
-    all: [],
-    find: [
-      iff(isProvider('external'), discard('userId'))
+    all: [
+      iff(
+        isProvider('external'),
+        discard('userId', 'createdAt', 'updatedAt')
+      )
     ],
-    get: [
-      iff(isProvider('external'), discard('userId'))
-    ],
+    find: [],
+    get: [],
     create: [
-      processSpending()
+      processSpendingItems()
     ],
     update: [],
     patch: [
-      processSpending()
+      processSpendingItems()
     ],
     remove: []
   },

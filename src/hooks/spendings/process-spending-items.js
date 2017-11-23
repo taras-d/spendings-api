@@ -18,13 +18,24 @@ const beforeSave = async hook => {
 // Create new items (remove old if this is update)
 const afterSave = async hook => {
 
+  const spendingItemsService = hook.app.service('/spending-items');
+
   if (hook.method === 'patch') {
-    // TODO: Remove old items
+    // Remove old items
+    await spendingItemsService.remove(null, {
+      query: { spendingId: hook.result.id }
+    });
   }
 
-  // TODO: Create new items
+  // Create items
+  const items = hook.data.items;
+  if (items) {
+    items.forEach(item => item.spendingId = hook.result.id);
+    hook.result.items = await spendingItemsService.create(hook.data.items);
+  } else {
+    hook.result.items = [];
+  }
 
-  // TODO: Add items to result
   return hook;
 };
 
