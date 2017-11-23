@@ -20,7 +20,6 @@ describe('"users" service', () => {
   describe('create user', () => {
 
     it('create user', async () => {
-
       const res = await api.post('/users', {
         firstName: 'Test',  lastName: 'User 1',
         email: 'testUser1@mail.com', password: 'abc123'
@@ -49,7 +48,6 @@ describe('"users" service', () => {
   describe('login user', () => {
 
     it('login user', async () => {
-
       const res = await api.post('/authentication', {
         strategy: 'local',
         email: 'testUser1@mail.com',
@@ -83,6 +81,51 @@ describe('"users" service', () => {
       
   });
 
+  // Update user
+  describe('update user', () => {
+
+    before(async () => {
+      // Create other user
+      otherUser = (await api.post('users', {
+        firstName: 'Test', lastName: 'User 2',
+        email: 'testUser2@mail.com', password: 'abc123'
+      })).data;
+    });
+
+    it('refuse updating user if token failed', async () => {
+      try {
+        await api.patch(`users/${user.id}`, {});
+      } catch (err) {
+        expect(err.response.status).to.be.eq(HttpStatus.UNAUTHORIZED);
+      }
+    });
+
+    it('refuse updating user if not owner', async () => {
+      try {
+        await api.patch(`users/${otherUser.id}`, {}, {
+          headers: api.addToken(userToken)
+        });
+      } catch (err) {
+        expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
+      }
+    });
+
+    it('update user', async () => {
+      const res = await api.patch(`users/${user.id}`, { firstName: 'Mike' }, {
+        headers: api.addToken(userToken)
+      });
+      
+      expect(res.status).to.be.eq(HttpStatus.OK);
+      
+      const data = res.data;
+      expect(data).to.be.an('object').that.has.keys(
+        'id', 'firstName', 'lastName', 'email', 'updatedAt', 'createdAt'
+      );
+      expect(data.firstName).to.be.eq('Mike');
+    });
+
+  });
+
   // Delete user
   describe('Delete user', () => {
 
@@ -95,12 +138,6 @@ describe('"users" service', () => {
     });
 
     it('refuse deleting user if not owner', async () => {
-
-      otherUser = (await api.post('users', {
-        firstName: 'Test', lastName: 'User 2',
-        email: 'testUser2@mail.com', password: 'abc123'
-      })).data;
-
       try {
         await api.delete(`users/${otherUser.id}`, {
           headers: api.addToken(userToken)

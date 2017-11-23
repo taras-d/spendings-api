@@ -20,14 +20,11 @@ module.exports = {
       hashPassword()
     ],
     update: [
-      disableMultiItemChange(),
-      discard('password'),
-      jwt(),
-      owner()
+      disallow('external')
     ],
     patch: [
       disableMultiItemChange(),
-      discard('password'),
+      discard('email', 'password', 'updatedAt', 'createdAt'),
       jwt(),
       owner()
     ],
