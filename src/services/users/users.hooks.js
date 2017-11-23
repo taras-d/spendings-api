@@ -8,9 +8,9 @@ const jwt = () => authenticate('jwt'),
 
 module.exports = {
   before: {
-    all: [ ],
+    all: [],
     find: [
-      disallow('rest')
+      disallow('external')
     ],
     get: [
       jwt(),
@@ -20,7 +20,7 @@ module.exports = {
       hashPassword()
     ],
     update: [
-      disallow('rest')
+      disallow('external')
     ],
     patch: [
       disableMultiItemChange(),

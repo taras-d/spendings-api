@@ -21,7 +21,7 @@ module.exports = {
       processSpending()
     ],
     update: [
-      disallow('rest')
+      disallow('external')
     ],
     patch: [
       disableMultiItemChange(),
@@ -37,10 +37,10 @@ module.exports = {
   after: {
     all: [],
     find: [
-      iff(isProvider('rest'), discard('userId'))
+      iff(isProvider('external'), discard('userId'))
     ],
     get: [
-      iff(isProvider('rest'), discard('userId'))
+      iff(isProvider('external'), discard('userId'))
     ],
     create: [
       processSpending()
