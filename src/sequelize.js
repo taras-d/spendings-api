@@ -1,9 +1,12 @@
 const Sequelize = require('sequelize');
 
+const env = process.env.NODE_ENV || 'develompent';
+
 module.exports = function (app) {
   const connectionString = app.get('sqlite');
   const sequelize = new Sequelize(connectionString, {
     dialect: 'sqlite',
+    logging: env === 'development'? console.log: false,
     define: {
       freezeTableName: true
     }

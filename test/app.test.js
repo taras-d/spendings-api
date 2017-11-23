@@ -20,8 +20,18 @@ before(function(done) {
     // Clear database before tests
     await app.get('sequelizeClient').truncate();
 
+    // Create api client
+    const api = axios.create({ 
+      baseURL: `http://${host}:${port}` 
+    });
+    api.addToken = function(token) {
+      return Object.assign({}, this.defaults.headers, {
+        Authorization: `Bearer ${token}`
+      });
+    };
+
     // Save api client for next tests
-    app.set('apiClient', axios.create({ baseURL: `http://${host}:${port}` }));
+    app.set('apiClient', api);
 
     done();
   });
