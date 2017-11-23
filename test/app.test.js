@@ -4,6 +4,14 @@ const app = require('../src/app');
 
 before(function(done) {
 
+  if (process.env.NODE_ENV !== 'test') {
+    console.warn(
+      'Tests can be run only in "test" environment. ' +
+      'Check "process.env.NODE_ENV" variable.'
+    );
+    process.exit();
+  }
+
   const { port, host } = app.settings;
 
   this.server = app.listen(port);
