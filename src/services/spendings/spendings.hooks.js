@@ -1,6 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks,
   { restrictToOwner } = require('feathers-authentication-hooks'),
-  { disallow, disableMultiItemChange } = require('feathers-hooks-common');
+  { discard, isProvider, iff, disallow, disableMultiItemChange } = require('feathers-hooks-common');
 
 const processSpending = require('../../hooks/spending/process-spending');
 
@@ -36,8 +36,12 @@ module.exports = {
 
   after: {
     all: [],
-    find: [],
-    get: [],
+    find: [
+      iff(isProvider('external'), discard('userId'))
+    ],
+    get: [
+      iff(isProvider('external'), discard('userId'))
+    ],
     create: [
       processSpending()
     ],
