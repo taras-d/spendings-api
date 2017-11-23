@@ -10,7 +10,7 @@ module.exports = {
   before: {
     all: [ ],
     find: [
-      disallow('external')
+      disallow('rest')
     ],
     get: [
       jwt(),
@@ -20,7 +20,7 @@ module.exports = {
       hashPassword()
     ],
     update: [
-      disallow('external')
+      disallow('rest')
     ],
     patch: [
       disableMultiItemChange(),
