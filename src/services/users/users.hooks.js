@@ -1,5 +1,5 @@
 const { authenticate } = require('@feathersjs/authentication').hooks,
-  { disallow, disableMultiItemChange } = require('feathers-hooks-common'),
+  { disallow, disableMultiItemChange, discard } = require('feathers-hooks-common'),
   { restrictToOwner } = require('feathers-authentication-hooks'),
   { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 
@@ -21,15 +21,15 @@ module.exports = {
     ],
     update: [
       disableMultiItemChange(),
+      discard('password'),
       jwt(),
-      owner(),
-      hashPassword()
+      owner()
     ],
     patch: [
       disableMultiItemChange(),
+      discard('password'),
       jwt(),
-      owner(),
-      hashPassword()
+      owner()
     ],
     remove: [
       disableMultiItemChange(),

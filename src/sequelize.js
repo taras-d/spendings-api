@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const env = process.env.NODE_ENV || 'develompent';
+const env = process.env.NODE_ENV || 'development';
 
 module.exports = function (app) {
   const connectionString = app.get('sqlite');
