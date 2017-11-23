@@ -21,9 +21,9 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "test": "npm run eslint && npm run mocha",
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
     "start": "node src/",
+    "test": "cross-env NODE_ENV=test sequelize db:migrate && npm run eslint && cross-env NODE_ENV=test npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
     "mocha": "mocha test/ --recursive --exit"
   },
   "dependencies": {
@@ -50,6 +50,7 @@
   "devDependencies": {
     "axios": "^0.17.1",
     "chai": "^4.1.2",
+    "cross-env": "^5.1.1",
     "eslint": "^4.11.0",
     "mocha": "^4.0.1",
     "request": "^2.83.0"

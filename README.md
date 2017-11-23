@@ -24,11 +24,7 @@ npm start              # Start Feathers app
 ```
 
 ## Testing
-Tests can be run only in test enviroment. Make sure you set `NODE_ENV=test`.
-```
-NODE_ENV=test sequelize db:migrate     # Run migrations if needed
-NODE_ENV=test npm test                 # Run tests
-```
+Simply run `npm test` and all your tests in the `test/` directory will be run.
 
 ## Scaffolding
 
