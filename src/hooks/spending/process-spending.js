@@ -13,7 +13,7 @@ const beforeSave = async hook => {
   }
 
   return hook;
-}
+};
 
 // Create new items (remove old if this is update)
 const afterSave = async hook => {
@@ -26,7 +26,7 @@ const afterSave = async hook => {
 
   // TODO: Add items to result
   return hook;
-}
+};
 
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
   return async hook => {

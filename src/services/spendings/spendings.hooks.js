@@ -1,6 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks,
   { restrictToOwner } = require('feathers-authentication-hooks'),
-  { disallow, disableMultiItemChange, discard } = require('feathers-hooks-common');
+  { disallow, disableMultiItemChange } = require('feathers-hooks-common');
 
 const processSpending = require('../../hooks/spending/process-spending');
 

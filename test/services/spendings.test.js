@@ -1,10 +1,11 @@
-const assert = require('assert');
+const { expect } = require('chai');
+
 const app = require('../../src/app');
 
-// describe('\'spendings\' service', () => {
-//   it('registered the service', () => {
-//     const service = app.service('spendings');
+describe('"spendings" service', () => {
 
-//     assert.ok(service, 'Registered the service');
-//   });
-// });
+  it('registered the service', () => {
+    expect( app.service('spendings') ).to.be.ok;
+  });
+
+});
