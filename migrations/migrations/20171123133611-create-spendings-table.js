@@ -21,7 +21,8 @@ module.exports = {
       },
       sum: {
         type: DataTypes.FLOAT,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE
