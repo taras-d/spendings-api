@@ -3,6 +3,8 @@ const { authenticate } = require('@feathersjs/authentication').hooks,
   { restrictToOwner } = require('feathers-authentication-hooks'),
   { hashPassword } = require('@feathersjs/authentication-local').hooks;
 
+const checkPasswordBeforeRemove = require('../../hooks/users/check-password-before-remove');
+
 const jwt = () => authenticate('jwt'),
   owner = () => restrictToOwner({ idField: 'id', ownerField: 'id' });
 
@@ -29,9 +31,15 @@ module.exports = {
       owner()
     ],
     remove: [
+      hook => { 
+        const query = hook.params.query;
+        hook._confirmPassword = query.password;
+        delete query.password;
+      },
       disableMultiItemChange(),
       jwt(),
-      owner()
+      owner(),
+      checkPasswordBeforeRemove()
     ]
   },
 

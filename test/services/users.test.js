@@ -143,8 +143,18 @@ describe('"users" service', () => {
       }
     });
 
+    it('refuse deleting user if incorrect password', async () => {
+      try {
+        await api.delete(`users/${user.id}?password=1111`, {
+          headers: api.addToken(userToken)
+        });
+      } catch (err) {
+        expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
+      }
+    });
+
     it('delete user', async () => {
-      const res = await api.delete(`users/${user.id}`, {
+      const res = await api.delete(`users/${user.id}?password=abc123`, {
         headers: api.addToken(userToken)
       });
       expect(res.status).to.be.eq(HttpStatus.OK);
