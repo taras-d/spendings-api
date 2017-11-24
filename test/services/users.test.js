@@ -26,9 +26,7 @@ describe('"users" service', () => {
       });
 
       expect(res.status).to.be.eq(HttpStatus.CREATED);
-      expect(res.data).to.be.an('object').that.has.keys(
-        'id', 'firstName', 'lastName', 'email', 'createdAt', 'updatedAt'
-      );
+      expect(res.data).to.be.an('object').that.has.keys('id', 'firstName', 'lastName', 'email');
     });
 
     it('refuse creating user if email alredy exist', async () => {
@@ -118,9 +116,7 @@ describe('"users" service', () => {
       expect(res.status).to.be.eq(HttpStatus.OK);
       
       const data = res.data;
-      expect(data).to.be.an('object').that.has.keys(
-        'id', 'firstName', 'lastName', 'email', 'updatedAt', 'createdAt'
-      );
+      expect(data).to.be.an('object').that.has.keys('id', 'firstName', 'lastName', 'email');
       expect(data.firstName).to.be.eq('Mike');
     });
 

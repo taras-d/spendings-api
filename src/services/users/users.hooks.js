@@ -1,7 +1,7 @@
 const { authenticate } = require('@feathersjs/authentication').hooks,
-  { disallow, disableMultiItemChange, discard } = require('feathers-hooks-common'),
+  { disallow, disableMultiItemChange, discard, iff, isProvider } = require('feathers-hooks-common'),
   { restrictToOwner } = require('feathers-authentication-hooks'),
-  { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+  { hashPassword } = require('@feathersjs/authentication-local').hooks;
 
 const jwt = () => authenticate('jwt'),
   owner = () => restrictToOwner({ idField: 'id', ownerField: 'id' });
@@ -36,10 +36,11 @@ module.exports = {
   },
 
   after: {
-    all: [ 
-      // Make sure the password field is never sent to the client
-      // Always must be the last hook
-      protect('password')
+    all: [
+      iff(
+        isProvider('external'),
+        discard('password', 'createdAt', 'updatedAt')
+      )
     ],
     find: [],
     get: [],
