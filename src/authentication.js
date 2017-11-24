@@ -1,8 +1,7 @@
 const authentication = require('@feathersjs/authentication'),
   jwt = require('@feathersjs/authentication-jwt'),
   local = require('@feathersjs/authentication-local'),
-  { discard } = require('feathers-hooks-common');
-
+  { discard, iff, isProvider } = require('feathers-hooks-common');
 
 module.exports = function (app) {
   const config = app.get('authentication');
@@ -29,7 +28,10 @@ module.exports = function (app) {
         hook => {
           hook.result.user = hook.params.user;
         },
-        discard('user.password')
+        iff(
+          isProvider('external'),
+          discard('user.password', 'user.createdAt', 'user.updatedAt')
+        )
       ]
     }
   });

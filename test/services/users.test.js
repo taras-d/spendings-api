@@ -56,9 +56,7 @@ describe('"users" service', () => {
 
       const data = res.data;
       expect(data).to.be.an('object').that.has.keys('accessToken', 'user');
-      expect(data.user).to.be.an('object').that.has.keys(
-        'id', 'firstName', 'lastName', 'email', 'createdAt', 'updatedAt'
-      );
+      expect(data.user).to.be.an('object').that.has.keys('id', 'firstName', 'lastName', 'email');
 
       // Save user and token
       user = data.user;
