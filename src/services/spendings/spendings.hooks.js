@@ -1,10 +1,29 @@
 const { authenticate } = require('@feathersjs/authentication').hooks,
   { restrictToOwner } = require('feathers-authentication-hooks'),
-  { discard, isProvider, iff, disallow, disableMultiItemChange } = require('feathers-hooks-common');
+  { discard, isProvider, iff, disallow, disableMultiItemChange, populate } = require('feathers-hooks-common');
 
-const processSpendingItems = require('../../hooks/spendings/process-spending-items');
+const saveSpendingItems = require('../../hooks/spendings/save-spending-items');
 
 const owner = () => restrictToOwner({ idField: 'id', ownerField: 'userId' });
+
+const populateItems = [
+  populate({
+    schema: {
+      include: {
+        service: 'spending-items',
+        nameAs: 'items',
+        parentField: 'id',
+        childField: 'spendingId',
+        query: {
+          $select: ['id', 'name', 'cost']
+        },
+        asArray: true,
+        provider: undefined
+      }
+    }
+  }),
+  discard('_include')
+];
 
 module.exports = {
   before: {
@@ -18,7 +37,7 @@ module.exports = {
       owner()
     ],
     create: [
-      processSpendingItems()
+      saveSpendingItems()
     ],
     update: [
       disallow('external')
@@ -26,7 +45,7 @@ module.exports = {
     patch: [
       disableMultiItemChange(),
       owner(),
-      processSpendingItems()
+      saveSpendingItems()
     ],
     remove: [
       disableMultiItemChange(),
@@ -41,14 +60,20 @@ module.exports = {
         discard('userId', 'createdAt', 'updatedAt')
       )
     ],
-    find: [],
-    get: [],
+    find: [
+      ...populateItems
+    ],
+    get: [
+      ...populateItems
+    ],
     create: [
-      processSpendingItems()
+      saveSpendingItems(),
+      ...populateItems
     ],
     update: [],
     patch: [
-      processSpendingItems()
+      saveSpendingItems(),
+      ...populateItems
     ],
     remove: []
   },

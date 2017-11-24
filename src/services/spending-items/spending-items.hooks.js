@@ -1,4 +1,4 @@
-const { disallow, discard } = require('feathers-hooks-common');
+const { disallow } = require('feathers-hooks-common');
 
 module.exports = {
   before: {
@@ -14,9 +14,7 @@ module.exports = {
   },
 
   after: {
-    all: [
-      discard('spendingId', 'createdAt', 'updatedAt')
-    ],
+    all: [],
     find: [],
     get: [],
     create: [],

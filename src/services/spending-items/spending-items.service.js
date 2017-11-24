@@ -5,11 +5,12 @@ const hooks = require('./spending-items.hooks');
 
 module.exports = function (app) {
   const Model = createModel(app);
+  const paginate = app.get('paginate');
 
   const options = {
     name: 'spending-items',
     Model,
-    paginate: false
+    paginate
   };
 
   // Initialize our service with any options it requires

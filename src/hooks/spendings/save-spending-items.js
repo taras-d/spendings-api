@@ -15,25 +15,23 @@ const beforeSave = async hook => {
   return hook;
 };
 
-// Create new items (remove old if this is update)
+// Create new items (remove old if this is patch)
 const afterSave = async hook => {
 
-  const spendingItemsService = hook.app.service('/spending-items');
+  const spendingItemsService = hook.app.service('/spending-items'),
+    data = hook.data;
 
-  if (hook.method === 'patch') {
+  if (hook.method === 'patch' && 'items' in data) {
     // Remove old items
     await spendingItemsService.remove(null, {
       query: { spendingId: hook.result.id }
     });
   }
 
-  // Create items
-  const items = hook.data.items;
-  if (items) {
-    items.forEach(item => item.spendingId = hook.result.id);
-    hook.result.items = await spendingItemsService.create(hook.data.items);
-  } else {
-    hook.result.items = [];
+  // Create new items
+  if (Array.isArray(data.items)) {
+    data.items.forEach(item => item.spendingId = hook.result.id);
+    await spendingItemsService.create(data.items);
   }
 
   return hook;
