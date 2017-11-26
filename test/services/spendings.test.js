@@ -20,7 +20,7 @@ const createTestUser = async number => {
   return (await api.post('authentication', {
     strategy: 'local', email: data.email, password: data.password
   })).data;
-}
+};
 
 describe('"spendings" service', () => {
 
