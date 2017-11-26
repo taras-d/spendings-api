@@ -1,6 +1,6 @@
 # spendings-api
 
-> REST API for Spendings app
+> REST API for [Spendings app](https://github.com/taras-d/spendings)
 
 ## About
 
