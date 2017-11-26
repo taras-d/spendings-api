@@ -24,7 +24,7 @@ npm start              # Start Feathers app
 ```
 
 ## Testing
-Simply run `npm test` and all your tests in the `test/` directory will be run.
+Simply run `npm test` and all your tests _required_ in the `test/run.js` will be run.
 
 ## Scaffolding
 

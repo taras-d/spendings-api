@@ -24,7 +24,7 @@
     "start": "node src/",
     "test": "cross-env NODE_ENV=test sequelize db:migrate && npm run eslint && cross-env NODE_ENV=test npm run mocha",
     "eslint": "eslint src/. test/. --config .eslintrc.json",
-    "mocha": "mocha test/ --recursive --exit --timeout=10000"
+    "mocha": "mocha test/run.js --exit --timeout=10000"
   },
   "dependencies": {
     "@feathersjs/authentication": "^2.0.1",

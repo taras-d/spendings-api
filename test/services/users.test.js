@@ -21,8 +21,8 @@ describe('"users" service', () => {
 
     it('create user', async () => {
       const res = await api.post('/users', {
-        firstName: 'Test',  lastName: 'User 1',
-        email: 'testUser1@mail.com', password: 'abc123'
+        firstName: 'User 1',  lastName: 'User 1',
+        email: 'user1@mail.com', password: 'abc123'
       });
 
       expect(res.status).to.be.eq(HttpStatus.CREATED);
@@ -33,7 +33,7 @@ describe('"users" service', () => {
       try {
         await api.post('/users', {
           firstName: '123',  lastName: '456',
-          email: 'testUser1@mail.com', password: '789'
+          email: 'user1@mail.com', password: '789'
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.BAD_REQUEST);
@@ -48,7 +48,7 @@ describe('"users" service', () => {
     it('login user', async () => {
       const res = await api.post('/authentication', {
         strategy: 'local',
-        email: 'testUser1@mail.com',
+        email: 'user1@mail.com',
         password: 'abc123'
       });
 
@@ -83,8 +83,8 @@ describe('"users" service', () => {
     before(async () => {
       // Create other user
       otherUser = (await api.post('users', {
-        firstName: 'Test', lastName: 'User 2',
-        email: 'testUser2@mail.com', password: 'abc123'
+        firstName: 'User 2', lastName: 'User 2',
+        email: 'user2@mail.com', password: 'abc123'
       })).data;
     });
 
@@ -99,7 +99,7 @@ describe('"users" service', () => {
     it('refuse updating user if not owner', async () => {
       try {
         await api.patch(`users/${otherUser.id}`, {}, {
-          headers: api.addToken(userToken)
+          headers: api.tokenize(userToken)
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
@@ -108,7 +108,7 @@ describe('"users" service', () => {
 
     it('update user', async () => {
       const res = await api.patch(`users/${user.id}`, { firstName: 'Mike' }, {
-        headers: api.addToken(userToken)
+        headers: api.tokenize(userToken)
       });
       
       expect(res.status).to.be.eq(HttpStatus.OK);
@@ -121,7 +121,7 @@ describe('"users" service', () => {
   });
 
   // Delete user
-  describe('Delete user', () => {
+  describe('delete user', () => {
 
     it('refuse deleting user if token failed', async () => {
       try {
@@ -134,7 +134,7 @@ describe('"users" service', () => {
     it('refuse deleting user if not owner', async () => {
       try {
         await api.delete(`users/${otherUser.id}`, {
-          headers: api.addToken(userToken)
+          headers: api.tokenize(userToken)
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
@@ -144,7 +144,7 @@ describe('"users" service', () => {
     it('refuse deleting user if incorrect password', async () => {
       try {
         await api.delete(`users/${user.id}?password=1111`, {
-          headers: api.addToken(userToken)
+          headers: api.tokenize(userToken)
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
@@ -153,7 +153,7 @@ describe('"users" service', () => {
 
     it('delete user', async () => {
       const res = await api.delete(`users/${user.id}?password=abc123`, {
-        headers: api.addToken(userToken)
+        headers: api.tokenize(userToken)
       });
       expect(res.status).to.be.eq(HttpStatus.OK);
     });

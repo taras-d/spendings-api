@@ -3,15 +3,6 @@ const axios = require('axios');
 const app = require('../src/app');
 
 before(function(done) {
-
-  if (process.env.NODE_ENV !== 'test') {
-    console.warn(
-      'Tests can be run only in "test" environment. ' +
-      'Check "process.env.NODE_ENV" variable.'
-    );
-    process.exit();
-  }
-
   const { port, host } = app.settings;
 
   this.server = app.listen(port);
@@ -21,10 +12,8 @@ before(function(done) {
     await app.get('sequelizeClient').truncate();
 
     // Create api client
-    const api = axios.create({ 
-      baseURL: `http://${host}:${port}` 
-    });
-    api.addToken = function(token) {
+    const api = axios.create({ baseURL: `http://${host}:${port}` });
+    api.tokenize = function(token) {
       return Object.assign({}, this.defaults.headers, {
         Authorization: `Bearer ${token}`
       });

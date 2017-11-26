@@ -3,31 +3,31 @@ const { expect } = require('chai'),
 
 const app = require('../../src/app');
 
-let api, 
-  user1, 
-  user1Spending,
-  user2,
-  user2Spending;
-
-const createTestUser = async number => {
-  const data = {
-    firstName: 'Test', lastName: `User ${number}`,
-    email: `testUser${number}@mail.com`, password: 'abc123'
-  };
-
-  await api.post('users', data);
-
-  return (await api.post('authentication', {
-    strategy: 'local', email: data.email, password: data.password
-  })).data;
-};
-
 describe('"spendings" service', () => {
+
+  let api, 
+    user1, 
+    user1Spending,
+    user2,
+    user2Spending;
+
+  const createUser = async number => {
+    const data = {
+      firstName: 'User', lastName: `User ${number}`,
+      email: `user${number}@mail.com`, password: 'abc123'
+    };
+  
+    await api.post('users', data);
+  
+    return (await api.post('authentication', {
+      strategy: 'local', email: data.email, password: data.password
+    })).data;
+  };
 
   before(async () => {
     api = app.get('apiClient');
-    user1 = await createTestUser(3);
-    user2 = await createTestUser(4);
+    user1 = await createUser(3);
+    user2 = await createUser(4);
   });
 
   it('registered the service', () => {
@@ -35,19 +35,17 @@ describe('"spendings" service', () => {
   });
 
   // Create spending
-  describe('Create spending', () => {
+  describe('create spending', () => {
 
-    it('Refuse creating spending if token invalid', async () => {
+    it('refuse creating spending if token invalid', async () => {
       try {
-        await api.post('spendings', {
-          date: new Date(), items: []
-        });
+        await api.post('spendings', { date: new Date(), items: [] });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.UNAUTHORIZED);
       }
     });
 
-    it('Create spending', async () => {
+    it('create spending', async () => {
       const res = await api.post('spendings', {
         date: new Date(),
         items: [
@@ -55,7 +53,7 @@ describe('"spendings" service', () => {
           { name: 'Other', cost: 32.67 }
         ]
       }, {
-        headers: api.addToken(user1.accessToken)
+        headers: api.tokenize(user1.accessToken)
       });
 
       expect(res.status).to.be.eq(HttpStatus.CREATED);
@@ -73,9 +71,9 @@ describe('"spendings" service', () => {
   });
 
   // Get spendings
-  describe('Get spendings', () => {
+  describe('get spendings', () => {
 
-    it('Refuse getting spendings if token failed', async () => {
+    it('refuse getting spendings if token failed', async () => {
       try {
         await api.get('spendings');
       } catch (err) {
@@ -83,9 +81,9 @@ describe('"spendings" service', () => {
       }
     });
 
-    it('Get array of spendings', async () => {
+    it('get list of spendings', async () => {
       const res = await api.get('spendings', {
-        headers: api.addToken(user1.accessToken)
+        headers: api.tokenize(user1.accessToken)
       });
 
       expect(res.status).to.be.eq(HttpStatus.OK);
@@ -98,9 +96,9 @@ describe('"spendings" service', () => {
       expect(data.data).to.be.an('array').that.has.length(1);
     });
 
-    it('Get single spending', async () => {
+    it('get single spending', async () => {
       const res = await api.get(`spendings/${user1Spending.id}`, {
-        headers: api.addToken(user1.accessToken)
+        headers: api.tokenize(user1.accessToken)
       });
 
       expect(res.status).to.be.eq(HttpStatus.OK);
@@ -116,9 +114,9 @@ describe('"spendings" service', () => {
   });
 
   // Update spending
-  describe('Update spending', () => {
+  describe('update spending', () => {
     
-    it('Refuse updating spending if token failed', async () => {
+    it('refuse updating spending if token failed', async () => {
       try {
         await api.patch(`spendings/${user1Spending.id}`, {
           date: new Date()
@@ -128,27 +126,27 @@ describe('"spendings" service', () => {
       }
     });
 
-    it('Refuse updating spending if not owner', async () => {
+    it('refuse updating spending if not owner', async () => {
       user2Spending = (
         await api.post('spendings', { date: new Date() }, {
-          headers: api.addToken(user2.accessToken)
+          headers: api.tokenize(user2.accessToken)
         })
       ).data;
 
       try {
         await api.patch(`spendings/${user2Spending.id}`, {}, {
-          headers: api.addToken(user1.accessToken)
+          headers: api.tokenize(user1.accessToken)
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
       }
     });
 
-    it('Update spending', async () => {
+    it('update spending', async () => {
       const res = await api.patch(`spendings/${user1Spending.id}`, {
         date: new Date(), items: [{ name: 'Bus', cost: 4 }]
       }, {
-        headers: api.addToken(user1.accessToken)
+        headers: api.tokenize(user1.accessToken)
       });
 
       expect(res.status).to.be.eq(HttpStatus.OK);
@@ -164,9 +162,9 @@ describe('"spendings" service', () => {
   });
 
   // Delete spending
-  describe('Delete spending', () => {
+  describe('delete spending', () => {
     
-    it('Refuse deleting spending if token failed', async () => {
+    it('refuse deleting spending if token failed', async () => {
       try {
         await api.delete(`spendings/${user1Spending.id}`);
       } catch (err) {
@@ -174,19 +172,19 @@ describe('"spendings" service', () => {
       }
     });
 
-    it('Refuse deleting spending if not owner', async () => {
+    it('refuse deleting spending if not owner', async () => {
       try {
         await api.delete(`spendings/${user2Spending.id}`, {
-          headers: api.addToken(user1.accessToken)
+          headers: api.tokenize(user1.accessToken)
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
       }
     });
 
-    it('Delete spending', async () => {
+    it('delete spending', async () => {
       const res = await api.delete(`spendings/${user1Spending.id}`, {
-        headers: api.addToken(user1.accessToken)
+        headers: api.tokenize(user1.accessToken)
       });
 
       expect(res.status).to.be.eq(HttpStatus.OK);
