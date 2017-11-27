@@ -1,4 +1,4 @@
-const { disallow } = require('feathers-hooks-common'),
+const { disallow, iff, isProvider, discard } = require('feathers-hooks-common'),
   { hashPassword } = require('@feathersjs/authentication-local').hooks;
 
 module.exports = {
@@ -28,7 +28,12 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      iff(
+        isProvider('external'),
+        discard('id', 'password', 'createdAt', 'updatedAt')
+      )
+    ],
     update: [],
     patch: [],
     remove: []

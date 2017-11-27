@@ -22,6 +22,9 @@ describe('"users" service', () => {
       });
 
       expect(res.status).to.be.eq(HttpStatus.CREATED);
+
+      const data = res.data;
+      expect(data).to.be.an('object').that.has.keys('firstName', 'lastName', 'email');
     });
 
     it('refuse creating user if email alredy exist', async () => {
