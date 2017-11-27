@@ -5,47 +5,16 @@ const app = require('../../src/app');
 
 describe('"current-user" service', () => {
 
-  let api;
-  before(() => api = app.get('apiClient'));
+  let api,
+    userToken;
+    
+  before(() => {
+    api = app.get('apiClient');
+    userToken = app.get('userToken');
+  });
 
   it('registered the service', () => {
     expect( app.service('users') ).to.be.ok;
-  });
-
-  let userToken;
-
-  // Login user
-  describe('login user', () => {
-
-    it('login user', async () => {
-      const res = await api.post('/authentication', {
-        strategy: 'local',
-        email: 'user1@mail.com',
-        password: 'abc123'
-      });
-
-      expect(res.status).to.be.eq(HttpStatus.CREATED);
-
-      const data = res.data;
-      expect(data).to.be.an('object').that.has.keys('accessToken', 'user');
-      expect(data.user).to.be.an('object').that.has.keys('id', 'firstName', 'lastName', 'email');
-
-      // Save token
-      userToken = data.accessToken;
-    });
-
-    it('refuse login user if email or password incorrect', async () => {
-      try {
-        await api.post('/authentication', {
-          strategy: 'local',
-          email: 'nobody@mail.com',
-          password: 'no-matter'
-        });
-      } catch (err) {
-        expect(err.response.status).to.be.eq(HttpStatus.UNAUTHORIZED);
-      }
-    });
-      
   });
 
   // Get user
