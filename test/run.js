@@ -10,4 +10,5 @@ if (process.env.NODE_ENV !== 'test') {
 require('./app.test');
 require('./services/ping.test');
 require('./services/users.test');
+require('./services/current-user.test');
 require('./services/spendings.test');
