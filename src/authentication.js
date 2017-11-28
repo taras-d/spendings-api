@@ -17,6 +17,10 @@ module.exports = function (app) {
   app.service('authentication').hooks({
     before: {
       create: [
+        hook => {
+          // Always use "local" strategy
+          hook.data.strategy = 'local';
+        },
         authentication.hooks.authenticate(config.strategies),
       ],
       remove: [
