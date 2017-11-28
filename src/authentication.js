@@ -18,8 +18,10 @@ module.exports = function (app) {
     before: {
       create: [
         hook => {
-          // Always use "local" strategy
-          hook.data.strategy = 'local';
+          // By default use local strategy
+          if (!hook.data.strategy) {
+            hook.data.strategy = 'local';
+          }
         },
         authentication.hooks.authenticate(config.strategies),
       ],
