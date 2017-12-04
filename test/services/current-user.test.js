@@ -77,9 +77,9 @@ describe('"current-user" service', () => {
       }
     });
 
-    it('refuse deleting user if incorrect password?password=333', async () => {
+    it('refuse deleting user if incorrect password', async () => {
       try {
-        await api.delete('current-user', {
+        await api.delete('current-user?password=333', {
           headers: api.tokenize(user.accessToken)
         });
       } catch (err) {
