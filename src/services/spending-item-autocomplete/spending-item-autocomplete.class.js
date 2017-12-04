@@ -7,7 +7,7 @@ class Service {
 
   async find (params) {
     const sql = `
-SELECT spendingItems.name
+SELECT DISTINCT spendingItems.name
 FROM spendingItems
 LEFT JOIN spendings ON spendings.id = spendingItems.spendingId
 WHERE spendings.userId = :userId AND spendingItems.name LIKE :search ESCAPE '/'
