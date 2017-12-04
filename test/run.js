@@ -13,3 +13,4 @@ require('./services/users.test');
 require('./services/authentication.test');
 require('./services/current-user.test');
 require('./services/spendings.test');
+require('./services/spending-item-autocomplete.test');
