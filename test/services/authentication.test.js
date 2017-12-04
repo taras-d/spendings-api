@@ -18,7 +18,7 @@ describe('"authentication" service', () => {
     it('login user', async () => {
       const res = await api.post('/authentication', {
         strategy: 'local',
-        email: 'user1@mail.com',
+        email: 'john.doe@mail.com',
         password: 'abc123'
       });
 
@@ -27,9 +27,6 @@ describe('"authentication" service', () => {
       const data = res.data;
       expect(data).to.be.an('object').that.has.keys('accessToken', 'user');
       expect(data.user).to.be.an('object').that.has.keys('id', 'firstName', 'lastName', 'email');
-
-      // Save token
-      app.set('userToken', data.accessToken);
     });
 
     it('refuse login user if email or password incorrect', async () => {

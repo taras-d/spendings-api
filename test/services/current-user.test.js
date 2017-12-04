@@ -1,16 +1,16 @@
 const { expect } = require('chai'),
   HttpStatus = require('http-status-codes');
 
-const app = require('../../src/app');
+const app = require('../../src/app'),
+  utils = require('../utils');
 
 describe('"current-user" service', () => {
 
-  let api,
-    userToken;
+  let api, user;
     
-  before(() => {
+  before(async () => {
     api = app.get('apiClient');
-    userToken = app.get('userToken');
+    user = await utils.createTestUser(api);
   });
 
   it('registered the service', () => {
@@ -30,7 +30,7 @@ describe('"current-user" service', () => {
 
     it('get user', async () => {
       const res = await api.get('current-user', {
-        headers: api.tokenize(userToken)
+        headers: api.tokenize(user.accessToken)
       });
       
       expect(res.status).to.be.eq(HttpStatus.OK);
@@ -54,7 +54,7 @@ describe('"current-user" service', () => {
 
     it('update user', async () => {
       const res = await api.patch('current-user', { firstName: 'Mike' }, {
-        headers: api.tokenize(userToken)
+        headers: api.tokenize(user.accessToken)
       });
       
       expect(res.status).to.be.eq(HttpStatus.OK);
@@ -77,10 +77,10 @@ describe('"current-user" service', () => {
       }
     });
 
-    it('refuse deleting user if incorrect password', async () => {
+    it('refuse deleting user if incorrect password?password=333', async () => {
       try {
         await api.delete('current-user', {
-          headers: api.tokenize(userToken)
+          headers: api.tokenize(user.accessToken)
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.FORBIDDEN);
@@ -89,7 +89,7 @@ describe('"current-user" service', () => {
 
     it('delete user', async () => {
       const res = await api.delete('current-user?password=abc123', {
-        headers: api.tokenize(userToken)
+        headers: api.tokenize(user.accessToken)
       });
       expect(res.status).to.be.eq(HttpStatus.OK);
     });

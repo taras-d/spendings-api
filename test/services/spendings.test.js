@@ -1,7 +1,8 @@
 const { expect } = require('chai'),
   HttpStatus = require('http-status-codes');
 
-const app = require('../../src/app');
+const app = require('../../src/app'),
+  utils = require('../utils');
 
 describe('"spendings" service', () => {
 
@@ -11,23 +12,10 @@ describe('"spendings" service', () => {
     user2,
     user2Spending;
 
-  const createUser = async number => {
-    const data = {
-      firstName: 'User', lastName: `User ${number}`,
-      email: `user${number}@mail.com`, password: 'abc123'
-    };
-  
-    await api.post('users', data);
-  
-    return (await api.post('authentication', {
-      strategy: 'local', email: data.email, password: data.password
-    })).data;
-  };
-
   before(async () => {
     api = app.get('apiClient');
-    user1 = await createUser(3);
-    user2 = await createUser(4);
+    user1 = await utils.createTestUser(api);
+    user2 = await utils.createTestUser(api);
   });
 
   it('registered the service', () => {

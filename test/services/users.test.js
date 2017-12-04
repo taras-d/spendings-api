@@ -17,8 +17,8 @@ describe('"users" service', () => {
     
     it('create user', async () => {
       const res = await api.post('/users', {
-        firstName: 'User 1',  lastName: 'User 1',
-        email: 'user1@mail.com', password: 'abc123'
+        firstName: 'John',  lastName: 'Doe',
+        email: 'john.doe@mail.com', password: 'abc123'
       });
 
       expect(res.status).to.be.eq(HttpStatus.CREATED);
@@ -30,8 +30,8 @@ describe('"users" service', () => {
     it('refuse creating user if email alredy exist', async () => {
       try {
         await api.post('/users', {
-          firstName: '123',  lastName: '456',
-          email: 'user1@mail.com', password: '789'
+          firstName: 'J',  lastName: 'D',
+          email: 'john.doe@mail.com', password: 'abc123'
         });
       } catch (err) {
         expect(err.response.status).to.be.eq(HttpStatus.BAD_REQUEST);

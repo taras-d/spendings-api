@@ -12,7 +12,7 @@ FROM spendingItems
 LEFT JOIN spendings ON spendings.id = spendingItems.spendingId
 WHERE spendings.userId = :userId AND spendingItems.name LIKE :search ESCAPE '/'
 ORDER BY spendingItems.name ASC
-LIMIT 0, 5;`
+LIMIT 0, 5;`;
 
     const sequelize = this.app.get('sequelizeClient');
 
