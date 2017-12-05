@@ -77,8 +77,9 @@ describe('"spendings" service', () => {
       expect(res.status).to.be.eq(HttpStatus.OK);
 
       const data = res.data;
-      expect(data).to.be.an('object').that.has.keys('total', 'skip', 'limit', 'data');
+      expect(data).to.be.an('object').that.has.keys('total', 'totalSum', 'skip', 'limit', 'data');
       expect(data.total).to.be.a('number').that.eq(1);
+      expect(data.totalSum).to.be.a('number').that.eq(99.67);
       expect(data.skip).to.be.a('number').that.eq(0);
       expect(data.limit).to.be.a('number').that.eq(10);
       expect(data.data).to.be.an('array').that.has.length(1);

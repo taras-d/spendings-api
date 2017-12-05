@@ -2,7 +2,8 @@ const { authenticate } = require('@feathersjs/authentication').hooks,
   { restrictToOwner } = require('feathers-authentication-hooks'),
   { discard, isProvider, iff, disallow, disableMultiItemChange, populate } = require('feathers-hooks-common');
 
-const saveSpendingItems = require('../../hooks/spendings/save-spending-items');
+const saveSpendingItems = require('../../hooks/spendings/save-spending-items'),
+  totalSum = require('../../hooks/spendings/total-sum');
 
 const owner = () => restrictToOwner({ idField: 'id', ownerField: 'userId' });
 
@@ -61,6 +62,7 @@ module.exports = {
       )
     ],
     find: [
+      totalSum(),
       ...populateItems
     ],
     get: [
